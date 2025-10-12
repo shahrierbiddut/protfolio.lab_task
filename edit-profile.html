@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile | Employee Portal</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Edit Profile</h2>
+
+        <form id="editProfileForm">
+            <label>Employee ID</label>
+            <input type="text" id="empId" readonly>
+
+            <label>Full Name</label>
+            <input type="text" id="fullName" required>
+
+            <label>Role</label>
+            <input type="text" id="role" required>
+
+            <label>Logged in as</label>
+            <input type="text" id="loggedInAs" required>
+
+            <label>Date of Birth</label>
+            <input type="date" id="dob">
+
+            <label>Email</label>
+            <input type="email" id="email" required>
+
+            <label>Phone</label>
+            <input type="tel" id="phone">
+
+            <label>Address</label>
+            <input type="text" id="address">
+
+            <label>Designation</label>
+            <input type="text" id="designation">
+
+            <label>Department</label>
+            <input type="text" id="department">
+
+            <label>Hire Date</label>
+            <input type="date" id="hireDate" readonly>
+
+            <label>Reporting Manager</label>
+            <input type="text" id="manager">
+
+            <label>Base Salary (Annual)</label>
+            <input type="number" id="salary" step="100">
+
+            <label>Last Raise Date</label>
+            <input type="date" id="raiseDate">
+
+            <label>Bonus Eligibility</label>
+            <input type="text" id="bonus">
+
+            <label>Time Off Balance</label>
+            <input type="text" id="pto">
+
+            <div class="button-group" style="margin-top:18px;">
+                <button class="btn" type="submit">Save Changes</button>
+                <button class="btn-secondary" id="cancelBtn" type="button">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const DEFAULT_PROFILE = {
+            empId: 'EMP001',
+            fullName: 'Shahrier Hossain',
+            role: 'Manager',
+            loggedInAs: 'HR',
+            dob: '1990-05-15',
+            phone: '555-1234',
+            email: 'jane.doe@company.com',
+            address: '123 Corporate Ave, City, ST 90210',
+            designation: 'Project Manager',
+            department: 'Product Development',
+            hireDate: '2018-08-01',
+            manager: 'John Smith',
+            salary: 94000,
+            raiseDate: '2024-01-20',
+            bonus: '20% of Base',
+            pto: '15 Days'
+        };
+
+        function loadForm() {
+            const raw = localStorage.getItem('employee_profile');
+            const p = raw ? JSON.parse(raw) : DEFAULT_PROFILE;
+
+            // fill inputs
+            document.getElementById('empId').value = p.empId || '';
+            document.getElementById('fullName').value = p.fullName || '';
+            document.getElementById('role').value = p.role || '';
+            document.getElementById('loggedInAs').value = p.loggedInAs || '';
+            document.getElementById('dob').value = p.dob || '';
+            document.getElementById('email').value = p.email || '';
+            document.getElementById('phone').value = p.phone || '';
+            document.getElementById('address').value = p.address || '';
+            document.getElementById('designation').value = p.designation || '';
+            document.getElementById('department').value = p.department || '';
+            document.getElementById('hireDate').value = p.hireDate || '';
+            document.getElementById('manager').value = p.manager || '';
+            document.getElementById('salary').value = p.salary !== undefined ? p.salary : '';
+            document.getElementById('raiseDate').value = p.raiseDate || '';
+            document.getElementById('bonus').value = p.bonus || '';
+            document.getElementById('pto').value = p.pto || '';
+        }
+
+        function saveForm(e) {
+            e.preventDefault();
+
+            const updated = {
+                empId: document.getElementById('empId').value,
+                fullName: document.getElementById('fullName').value,
+                role: document.getElementById('role').value,
+                loggedInAs: document.getElementById('loggedInAs').value,
+                dob: document.getElementById('dob').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                designation: document.getElementById('designation').value,
+                department: document.getElementById('department').value,
+                hireDate: document.getElementById('hireDate').value,
+                manager: document.getElementById('manager').value,
+                salary: Number(document.getElementById('salary').value) || 0,
+                raiseDate: document.getElementById('raiseDate').value,
+                bonus: document.getElementById('bonus').value,
+                pto: document.getElementById('pto').value
+            };
+
+            // Save to localStorage
+            localStorage.setItem('employee_profile', JSON.stringify(updated));
+
+            alert('✅ Profile updated successfully!');
+            // redirect back to admin page to see changes
+            window.location.href = 'admin.html';
+        }
+
+        document.getElementById('editProfileForm').addEventListener('submit', saveForm);
+        document.getElementById('cancelBtn').addEventListener('click', () => window.location.href = 'admin.html');
+
+        document.addEventListener('DOMContentLoaded', loadForm);
+    </script>
+</body>
+
+</html>
