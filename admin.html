@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Employee Portal</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <h2 id="profile-name">Shahrier Hossain</h2>
+            <p class="role" id="profile-role">Role: Manager</p>
+            <p>Logged in as: <span id="logged-in-as">HR</span></p>
+        </div>
+
+        <div class="info-section">
+            <h3>Personal Information</h3>
+            <div class="info-grid">
+                <p><strong>Employee ID:</strong> <span id="i-empid">EMP001</span></p>
+                <p><strong>Date of Birth:</strong> <span id="i-dob">15/05/1990</span></p>
+                <p><strong>Phone:</strong> <span id="i-phone">555-1234</span></p>
+                <p><strong>Email:</strong> <span id="i-email">jane.doe@company.com</span></p>
+                <p><strong>Address:</strong> <span id="i-address">123 Corporate Ave, City, ST 90210</span></p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Employment Details</h3>
+            <div class="info-grid">
+                <p><strong>Designation:</strong> <span id="i-designation">Project Manager</span></p>
+                <p><strong>Department:</strong> <span id="i-dept">Product Development</span></p>
+                <p><strong>Hire Date:</strong> <span id="i-hire">01/08/2018</span></p>
+                <p><strong>Reporting Manager:</strong> <span id="i-manager">John Smith</span></p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Compensation & Benefits</h3>
+            <div class="info-grid">
+                <p><strong>Base Salary (Annual):</strong> <span id="i-salary">$94,000</span></p>
+                <p><strong>Last Raise Date:</strong> <span id="i-raise">20/01/2024</span></p>
+                <p><strong>Bonus Eligibility:</strong> <span id="i-bonus">20% of Base</span></p>
+                <p><strong>Time Off Balance:</strong> <span id="i-pto">15 Days</span></p>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <!-- use anchor so navigation to edit-profile.html happens -->
+            <a href="edit-profile.html" class="btn" id="edit-btn">Edit Profile</a>
+            <button class="btn-secondary" id="print-btn">Print Profile</button>
+            <button class="btn-danger" id="logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Default profile object (used if nothing in localStorage)
+        const DEFAULT_PROFILE = {
+            empId: 'EMP001',
+            fullName: 'Shahrier Hossain',
+            role: 'Manager',
+            loggedInAs: 'HR',
+            dob: '1990-05-15', // ISO for easy formatting
+            phone: '555-1234',
+            email: 'jane.doe@company.com',
+            address: '123 Corporate Ave, City, ST 90210',
+            designation: 'Project Manager',
+            department: 'Product Development',
+            hireDate: '2018-08-01',
+            manager: 'John Smith',
+            salary: 94000,
+            raiseDate: '2024-01-20',
+            bonus: '20% of Base',
+            pto: '15 Days'
+        };
+
+        // Load profile from localStorage or use default
+        function loadProfile() {
+            const raw = localStorage.getItem('employee_profile');
+            const profile = raw ? JSON.parse(raw) : DEFAULT_PROFILE;
+
+            // Fill DOM
+            document.getElementById('profile-name').textContent = profile.fullName;
+            document.getElementById('profile-role').textContent = 'Role: ' + profile.role;
+            document.getElementById('logged-in-as').textContent = profile.loggedInAs;
+
+            document.getElementById('i-empid').textContent = profile.empId;
+            // Format dates to DD/MM/YYYY for display
+            document.getElementById('i-dob').textContent = formatDate(profile.dob);
+            document.getElementById('i-phone').textContent = profile.phone;
+            document.getElementById('i-email').textContent = profile.email;
+            document.getElementById('i-address').textContent = profile.address;
+
+            document.getElementById('i-designation').textContent = profile.designation;
+            document.getElementById('i-dept').textContent = profile.department;
+            document.getElementById('i-hire').textContent = formatDate(profile.hireDate);
+            document.getElementById('i-manager').textContent = profile.manager;
+
+            document.getElementById('i-salary').textContent = '$' + Number(profile.salary).toLocaleString();
+            document.getElementById('i-raise').textContent = formatDate(profile.raiseDate);
+            document.getElementById('i-bonus').textContent = profile.bonus;
+            document.getElementById('i-pto').textContent = profile.pto;
+        }
+
+        function formatDate(iso) {
+            if (!iso) return '-';
+            const d = new Date(iso);
+            if (isNaN(d)) return iso; // fallback
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return dd + '/' + mm + '/' + yyyy;
+        }
+
+        // Print button
+        document.getElementById('print-btn').addEventListener('click', () => window.print());
+
+        // Logout (simple redirect to login)
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            // Optionally clear localStorage or session items if you use them
+            // localStorage.removeItem('employee_profile');
+            window.location.href = 'login.html';
+        });
+
+        // initialize on page load
+        document.addEventListener('DOMContentLoaded', loadProfile);
+    </script>
+</body>
+
+</html>
